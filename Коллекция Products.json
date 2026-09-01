@@ -1,0 +1,370 @@
+{
+  "info": {
+    "_postman_id": "qa-test-products-fakestore",
+    "name": "FakeStore API - Products",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://fakestoreapi.com"
+    },
+    {
+      "key": "productId",
+      "value": "1"
+    },
+    {
+      "key": "category",
+      "value": "electronics"
+    }
+  ],
+  "item": [
+    {
+      "name": "Get all products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response is an array\", () => {",
+              "    pm.expect(pm.response.json()).to.be.an(\"array\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get product by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/{{productId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "{{productId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const product = pm.response.json();",
+              "",
+              "pm.test(\"Product has id\", () => {",
+              "    pm.expect(product).to.have.property(\"id\");",
+              "});",
+              "",
+              "pm.test(\"Product has title\", () => {",
+              "    pm.expect(product).to.have.property(\"title\");",
+              "});",
+              "",
+              "pm.test(\"Product has price\", () => {",
+              "    pm.expect(product).to.have.property(\"price\");",
+              "});",
+              "",
+              "pm.test(\"Product has category\", () => {",
+              "    pm.expect(product).to.have.property(\"category\");",
+              "});",
+              "",
+              "pm.test(\"Product has image\", () => {",
+              "    pm.expect(product).to.have.property(\"image\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get products by category",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/category/{{category}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "category",
+            "{{category}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response is an array\", () => {",
+              "    pm.expect(pm.response.json()).to.be.an(\"array\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get product categories",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/categories",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "categories"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response is an array\", () => {",
+              "    pm.expect(pm.response.json()).to.be.an(\"array\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create product",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"QA Test Product\",\n  \"price\": 99.99,\n  \"description\": \"Created by QA test collection\",\n  \"image\": \"https://i.pravatar.cc\",\n  \"category\": \"electronics\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/products",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200 or 201\", () => {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+              "});",
+              "",
+              "const product = pm.response.json();",
+              "",
+              "pm.test(\"Response has id\", () => {",
+              "    pm.expect(product).to.have.property(\"id\");",
+              "});",
+              "",
+              "pm.test(\"Response has title\", () => {",
+              "    pm.expect(product.title).to.eql(\"QA Test Product\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update product (PUT)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"QA Updated Product\",\n  \"price\": 109.99,\n  \"description\": \"Updated by QA\",\n  \"image\": \"https://i.pravatar.cc\",\n  \"category\": \"electronics\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/products/{{productId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "{{productId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const product = pm.response.json();",
+              "",
+              "pm.test(\"Response has id\", () => {",
+              "    pm.expect(product).to.have.property(\"id\");",
+              "});",
+              "",
+              "pm.test(\"Title was updated\", () => {",
+              "    pm.expect(product.title).to.eql(\"QA Updated Product\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update product (PATCH)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"price\": 119.99\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/products/{{productId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "{{productId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const product = pm.response.json();",
+              "",
+              "pm.test(\"Response has id\", () => {",
+              "    pm.expect(product).to.have.property(\"id\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete product",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/{{productId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "{{productId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const product = pm.response.json();",
+              "",
+              "pm.test(\"Response has id\", () => {",
+              "    pm.expect(product).to.have.property(\"id\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
